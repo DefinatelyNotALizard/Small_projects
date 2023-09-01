@@ -8,7 +8,6 @@ from pytube import YouTube as YT
 
 # Configure browser
 options = Options()
-options.add_experimental_option("detach", False)
 options.add_argument("--mute-audio")
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
@@ -25,7 +24,8 @@ def watch_videos():
       video = YT(url, use_oauth=True, allow_oauth_cache=True)
       print(video.title)
       driver.get(url)
-      time.sleep(2)
+      if videos.index(url) == 0:
+        time.sleep(5)
       
       #Set up list for tqdm
       video_length_list = []
@@ -34,12 +34,9 @@ def watch_videos():
         
       for i in tqdm.tqdm(video_length_list, desc="Progress:"):
           time.sleep(1)
-      print("====================================================")
-      print("Done", this_loop, "times")
-      print("====================================================")
-      this_loop += 1 
+      print("====================================================") 
 
-#The amount of times you want the videos watched (don't exceed 5)
+#The amount of times you want the videos watched.
 loop_times = 5
 this_loop = 0
 
@@ -47,6 +44,9 @@ print("====================================================")
 
 while this_loop < loop_times:
     watch_videos()
+    print("Done", this_loop, "times")
+    print("====================================================")
+    this_loop += 1
 
 print("Finished!")
 
